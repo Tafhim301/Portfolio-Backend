@@ -6,6 +6,7 @@ import config from './config';
 import cookieParser from 'cookie-parser';
 import { uptime } from 'process';
 import { timeStamp } from 'console';
+import { seedAdmin } from './app/middlewares/utils/seedAdmin';
 
 const app: Application = express();
 app.use(cors({
@@ -28,6 +29,8 @@ app.get('/', (req: Request, res: Response) => {
         timeStamp: new Date().toISOString()
     })
 });
+
+seedAdmin()
 
 
 app.use(globalErrorHandler);

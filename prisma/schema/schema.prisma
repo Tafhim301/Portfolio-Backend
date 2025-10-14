@@ -7,12 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String
-  role      String   @default("OWNER")
+  role      role   @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -25,6 +27,7 @@ model Blog {
   content    String
   excerpt    String
   coverImage String
+  isFeatured String
   published  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -41,4 +44,9 @@ model Project {
   features    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+
+enum role {
+  ADMIN
 }

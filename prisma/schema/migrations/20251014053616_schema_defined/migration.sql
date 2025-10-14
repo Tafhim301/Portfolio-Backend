@@ -1,41 +1,5 @@
-/*
-  Warnings:
-
-  - You are about to drop the `admins` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `doctors` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `patients` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `users` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "public"."admins" DROP CONSTRAINT "admins_email_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."doctors" DROP CONSTRAINT "doctors_email_fkey";
-
--- DropForeignKey
-ALTER TABLE "public"."patients" DROP CONSTRAINT "patients_email_fkey";
-
--- DropTable
-DROP TABLE "public"."admins";
-
--- DropTable
-DROP TABLE "public"."doctors";
-
--- DropTable
-DROP TABLE "public"."patients";
-
--- DropTable
-DROP TABLE "public"."users";
-
--- DropEnum
-DROP TYPE "public"."Gender";
-
--- DropEnum
-DROP TYPE "public"."UserRole";
-
--- DropEnum
-DROP TYPE "public"."UserStatus";
+-- CreateEnum
+CREATE TYPE "role" AS ENUM ('ADMIN');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -43,7 +7,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "role" TEXT NOT NULL DEFAULT 'OWNER',
+    "role" "role" NOT NULL DEFAULT 'ADMIN',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -58,6 +22,7 @@ CREATE TABLE "Blog" (
     "content" TEXT NOT NULL,
     "excerpt" TEXT NOT NULL,
     "coverImage" TEXT NOT NULL,
+    "isFeatured" TEXT NOT NULL,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
