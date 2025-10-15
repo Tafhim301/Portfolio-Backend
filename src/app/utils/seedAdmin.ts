@@ -1,9 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import config from "../../config";
 import bcrypt from "bcryptjs";
-import config from "../../../config";
-import { prisma } from "../../shared/prisma";
-
-
+import { prisma } from "../shared/prisma";
 
 export async function seedAdmin() {
   const email = config.ADMIN_EMAIL;
@@ -11,7 +8,7 @@ export async function seedAdmin() {
   const saltRounds = Number(config.BCRYPT_SALT_ROUND) || 10;
 
   if (!email || !password) {
-    console.error("❌ Admin email or password is missing in .env/config");
+    console.error("Admin email or password is missing in .env/config");
     process.exit(1);
   }
 
@@ -34,12 +31,3 @@ export async function seedAdmin() {
     console.log("Admin already exists");
   }
 }
-
-seedAdmin()
-  .catch((e) => {
-    console.error("❌ Error seeding admin:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });

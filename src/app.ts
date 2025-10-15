@@ -7,6 +7,7 @@ import { uptime } from 'process';
 import { timeStamp } from 'console';
 import router from './app/routes';
 import cookieParser from 'cookie-parser';
+import { seedAdmin } from './app/utils/seedAdmin';
 
 const app: Application = express();
 app.use(cors({
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/v1', router)
 
+
 app.get('/', (req: Request, res: Response) => {
     res.send({
         message: "Server is running..",
@@ -28,6 +30,9 @@ app.get('/', (req: Request, res: Response) => {
         timeStamp: new Date().toISOString()
     })
 });
+
+seedAdmin();
+
 
 
 app.use(globalErrorHandler);

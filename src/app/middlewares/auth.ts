@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { jwtHelper } from "../helper/jwtHelper";
 import config from "../../config";
 
+
 export const auth = (...roles : string[]) => {
     return async(req : Request, res: Response, next : NextFunction) => {
         console.log(req.cookies)
@@ -11,7 +12,7 @@ export const auth = (...roles : string[]) => {
             if(!token){
                 throw new Error("You are not authorized!")
             }
-            const verifyUser = jwtHelper.verifyToken(token,'abcd')
+            const verifyUser = jwtHelper.verifyToken(token, config.JWT_SECRET)
 
             req.user = verifyUser;
 

@@ -7,17 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String
-  role      role   @default(ADMIN)
+  role      role     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
+  @@map("user")
 }
 
 model Blog {
@@ -31,6 +30,8 @@ model Blog {
   published  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@map("blogs")
 }
 
 model Project {
@@ -44,8 +45,9 @@ model Project {
   features    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
 
+  @@map("projects")
+}
 
 enum role {
   ADMIN
