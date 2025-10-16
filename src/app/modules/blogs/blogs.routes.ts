@@ -8,6 +8,8 @@ import { fileUploader } from "../../helper/fileUploader";
 
 const router = Router();
 
+router.get("/", blogController.getBlogs);
+
 router.post(
   "/",
   auth(ROlE.ADMIN),
