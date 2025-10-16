@@ -9,9 +9,10 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
   },
 });
+
 
 const upload = multer({ storage: storage });
 
@@ -23,7 +24,7 @@ const uploadToCloudiary = async(file: Express.Multer.File) => {
     api_secret: config.cloudinary.api_secret,
   });
 
-  // Upload an image
+
   const uploadResult = await cloudinary.uploader
     .upload(
       file.path,
