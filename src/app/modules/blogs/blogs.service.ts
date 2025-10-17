@@ -8,6 +8,7 @@ import { generateUniqueSlug } from "../../utils/slugify";
 import { paginationHelper } from "../../helper/paginationHelper";
 import { Prisma } from "@prisma/client";
 import { blogSearchableFields } from "./blogs.constant";
+import { JwtPayload } from "jsonwebtoken";
 
 const getBlogs = async (filters: any, options: any) => {
   const { page, limit, skip, sortBy, sortOrder } =
@@ -81,15 +82,30 @@ const getBlogs = async (filters: any, options: any) => {
   };
 };
 const getSingleBlog = async (id: string) => {
+
+  
   const result = await prisma.blog.findUnique({
     where: {
       id: id,
     },
   });
-if(!result){
-  throw new ApiError(404,"Blog Not Found")
-}
-  return result;
+  if (!result) {
+    throw new ApiError(404, "Blog Not Found")
+  }
+
+  const updatedResult =  await prisma.blog.update({
+    where: {
+      id: id,
+    
+ },
+
+    data: {
+      views: result.views + 1
+    }
+
+
+  })
+  return updatedResult;
 };
 
 const createBlog = async (req: Request) => {
@@ -102,7 +118,7 @@ const createBlog = async (req: Request) => {
     where: { email: config.ADMIN_EMAIL },
   });
 
-  console.log(req.body);
+
 
   const slug = await generateUniqueSlug(req.body.blog.title, "blog");
 

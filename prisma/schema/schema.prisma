@@ -12,7 +12,7 @@ model User {
   email     String   @unique
   password  String
   name      String
-  role      ROlE    @default(ADMIN)
+  role      ROlE     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Blog      Blog[]
@@ -21,16 +21,16 @@ model User {
 }
 
 model Blog {
-  id         String  @id @default(uuid())
+  id         String   @id @default(uuid())
   title      String
-  slug       String  @unique
+  slug       String   @unique
   content    String
   excerpt    String
   coverImage String
   isFeatured Boolean? @default(false)
 
   tags      String[]
-  views     Int?      @default(0)
+  views     Int     @default(0)
   authorId  String
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
@@ -45,6 +45,7 @@ model Project {
   slug        String   @unique
   description String
   thumbnail   String
+  demoImages  String[] @default([])
   liveUrl     String
   repoUrl     String
   features    String[]
