@@ -10,11 +10,11 @@ const login = catchAsync(
 
     const { accessToken, refreshToken, user } = result;
 
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", accessToken, { 
       secure: true,
       httpOnly: true,
       sameSite: "none",
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 24 * 30,
     });
     res.cookie("refreshToken", refreshToken, {
       secure: true,

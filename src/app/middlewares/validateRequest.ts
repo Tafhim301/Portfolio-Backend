@@ -10,3 +10,9 @@ export const validateRequest =
       next(error);
     }
   };
+export const validateFormDataRequest =
+  (schema: ZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+     req.body = schema.parse(JSON.parse(req.body.data));
+     next();
+   }

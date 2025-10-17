@@ -26,7 +26,7 @@ const getBlogs = async (filters: any, options: any) => {
         },
       })),
       tags: {
-        has: searchTerm, 
+        has: searchTerm,
       },
     });
   }
@@ -80,6 +80,17 @@ const getBlogs = async (filters: any, options: any) => {
     data: result,
   };
 };
+const getSingleBlog = async (id: string) => {
+  const result = await prisma.blog.findUnique({
+    where: {
+      id: id,
+    },
+  });
+if(!result){
+  throw new ApiError(404,"Blog Not Found")
+}
+  return result;
+};
 
 const createBlog = async (req: Request) => {
   if (!req.file) {
@@ -108,8 +119,48 @@ const createBlog = async (req: Request) => {
 
   return blog;
 };
+const updateBlog = async (id: string, req: Request) => {
+  const existingBlog = await prisma.blog.findUnique({ where: { id } });
+  if (!existingBlog) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Blog not found");
+  }
+
+  let coverImage = existingBlog.coverImage;
+
+  if (req.file) {
+    const uploadedResult = await fileUploader.uploadToCloudiary(req.file);
+    coverImage = uploadedResult?.secure_url as string;
+  }
+
+  const updatedData: any = {
+    ...req.body.blog,
+    coverImage,
+  };
+
+  if (req.body.blog?.title && req.body.blog.title !== existingBlog.title) {
+    updatedData.slug = await generateUniqueSlug(req.body.blog.title, "blog");
+  }
+
+  const updatedBlog = await prisma.blog.update({
+    where: { id },
+    data: updatedData,
+  });
+
+  return updatedBlog;
+};
+const deleteBlog = async (id: string) => {
+  const existingBlog = await prisma.blog.delete({ where: { id } });
+  if (!existingBlog) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Blog not found");
+  }
+
+  return;
+};
 
 export const blogService = {
   createBlog,
   getBlogs,
+  updateBlog,
+  getSingleBlog,
+  deleteBlog
 };

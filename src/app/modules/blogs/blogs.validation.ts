@@ -20,3 +20,16 @@ export const createBlogSchema = z.object({
       .default([]),
   }),
 });
+
+
+
+export const updateBlogSchema = z.object({
+  blog: z.object({
+    title: z.string().min(3, "Title must be at least 3 characters").optional(),
+    content: z.string().min(10, "Content must be at least 10 characters").optional(),
+    excerpt: z.string().min(5, "Excerpt must be at least 5 characters").optional(),
+    tags: z.array(z.string().min(1, "Tag cannot be empty")).optional(),
+    isFeatured: z.boolean().optional(),
+  }),
+});
+

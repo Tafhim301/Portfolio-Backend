@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { blogController } from "./blogs.controller";
-import { validateRequest } from "../../middlewares/validateRequest";
-import { createBlogSchema } from "./blogs.validation";
+import { validateFormDataRequest } from "../../middlewares/validateRequest";
+import { createBlogSchema, updateBlogSchema } from "./blogs.validation";
 import { ROlE } from "@prisma/client";
 import { auth } from "../../middlewares/auth";
 import { fileUploader } from "../../helper/fileUploader";
@@ -9,18 +9,22 @@ import { fileUploader } from "../../helper/fileUploader";
 const router = Router();
 
 router.get("/", blogController.getBlogs);
-
+router.get("/:id", blogController.getSingleBlog);
 router.post(
   "/",
   auth(ROlE.ADMIN),
-
   fileUploader.upload.single("file"),
-  (req: Request, res: Response, next: NextFunction) => {
-    req.body = createBlogSchema.parse(JSON.parse(req.body.data));
-    next();
-  },
+  validateFormDataRequest(createBlogSchema),
 
   blogController.createBlog
 );
+router.patch(
+  "/:id",
+  auth(ROlE.ADMIN),
+  fileUploader.upload.single("file"),
+  validateFormDataRequest(updateBlogSchema),
+  blogController.updateBlog
+);
+router.delete('/:id',blogController.deleteBlog)
 
 export const blogRoutes = router;
