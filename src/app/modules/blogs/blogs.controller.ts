@@ -35,7 +35,7 @@ const updateBlog = catchAsync(
 );
 const getSingleBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await blogService.getSingleBlog(req.params.id);
+    const result = await blogService.getSingleBlog(req.params.slug);
 
     sendResponse(res, {
       statusCode: 201,

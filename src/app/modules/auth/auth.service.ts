@@ -2,6 +2,9 @@ import { prisma } from "../../shared/prisma";
 import bcrypt from "bcryptjs";
 import { jwtHelper } from "../../helper/jwtHelper";
 import config from "../../../config";
+import { JwtPayload } from "jsonwebtoken";
+import ApiError from "../../Errors/ApiError";
+
 
 const login = async (payload: { email: string; password: string }) => {
   await prisma.user.findUnique({ where: { email: payload.email } });
@@ -41,7 +44,36 @@ const login = async (payload: { email: string; password: string }) => {
     },
   };
 };
+const userInfo = async (payload : JwtPayload) => {
+
+  await prisma.user.findUnique({ where: { email: payload.email } });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: payload.email,
+    },
+  });
+
+  if(!user){
+    throw new ApiError(404,"User Not Found")
+  }
+
+
+
+ 
+  return {
+
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+  };
+};
+
+
 
 export const authService = {
   login,
-};
+  userInfo
+}

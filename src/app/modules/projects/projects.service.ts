@@ -63,10 +63,10 @@ const getAllProjects = async () => {
   return result
 }
 
-const getSingleProject = async (id : string) => {
+const getSingleProject = async (slug : string) => {
   const result = await prisma.project.findUnique({
     where : {
-      id : id
+      slug : slug
     }
   });
 

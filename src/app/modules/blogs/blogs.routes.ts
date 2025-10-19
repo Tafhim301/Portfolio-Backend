@@ -9,7 +9,7 @@ import { fileUploader } from "../../helper/fileUploader";
 const router = Router();
 
 router.get("/", blogController.getBlogs);
-router.get("/:id", blogController.getSingleBlog);
+router.get("/:slug", blogController.getSingleBlog);
 router.post(
   "/",
   auth(ROlE.ADMIN),

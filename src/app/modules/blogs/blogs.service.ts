@@ -81,12 +81,12 @@ const getBlogs = async (filters: any, options: any) => {
     data: result,
   };
 };
-const getSingleBlog = async (id: string) => {
+const getSingleBlog = async (slug: string) => {
 
   
   const result = await prisma.blog.findUnique({
     where: {
-      id: id,
+      slug: slug,
     },
   });
   if (!result) {
@@ -95,7 +95,7 @@ const getSingleBlog = async (id: string) => {
 
   const updatedResult =  await prisma.blog.update({
     where: {
-      id: id,
+      slug: slug,
     
  },
 

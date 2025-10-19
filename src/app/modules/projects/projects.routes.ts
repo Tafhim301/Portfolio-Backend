@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/', projectsController.getAllProjects)
 
-router.get('/:id', projectsController.getSingleProject)
+router.get('/:slug', projectsController.getSingleProject)
 router.delete('/:id', projectsController.deleteProject)
 
 

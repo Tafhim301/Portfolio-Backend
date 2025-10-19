@@ -29,7 +29,7 @@ const getAllProjects = catchAsync(
 );
 const getSingleProject = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await projectService.getSingleProject(req.params.id);
+    const result = await projectService.getSingleProject(req.params.slug);
 
     sendResponse(res, {
       statusCode: 201,

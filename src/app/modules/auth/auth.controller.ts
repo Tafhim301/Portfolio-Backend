@@ -10,7 +10,7 @@ const login = catchAsync(
 
     const { accessToken, refreshToken, user } = result;
 
-    res.cookie("accessToken", accessToken, { 
+    res.cookie("accessToken", accessToken, {
       secure: true,
       httpOnly: true,
       sameSite: "none",
@@ -33,7 +33,49 @@ const login = catchAsync(
     });
   }
 );
+const logOut = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    res.clearCookie('accessToken')
+
+
+
+
+
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Logged out successfully",
+      data: null
+    });
+  }
+);
+const userInfo = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const result = await authService.userInfo(req.user)
+
+
+
+
+
+
+
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "User retrieved successfully",
+      data: result
+    });
+  }
+);
+
+
 
 export const authController = {
   login,
+  logOut,
+  userInfo
 };
