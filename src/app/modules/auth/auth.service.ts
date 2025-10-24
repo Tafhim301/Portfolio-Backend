@@ -4,16 +4,21 @@ import { jwtHelper } from "../../helper/jwtHelper";
 import config from "../../../config";
 import { JwtPayload } from "jsonwebtoken";
 import ApiError from "../../Errors/ApiError";
+import httpstatus from "http-status";
 
 
 const login = async (payload: { email: string; password: string }) => {
   await prisma.user.findUnique({ where: { email: payload.email } });
 
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: {
       email: payload.email,
     },
   });
+
+  if(!user){
+    throw new ApiError(httpstatus.BAD_REQUEST,"Invalid Credentials")
+  }
 
   const isCorrectPassword = await bcrypt.compare(
     payload.password,
@@ -46,7 +51,6 @@ const login = async (payload: { email: string; password: string }) => {
 };
 const userInfo = async (payload : JwtPayload) => {
 
-  await prisma.user.findUnique({ where: { email: payload.email } });
 
   const user = await prisma.user.findUnique({
     where: {

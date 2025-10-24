@@ -172,11 +172,34 @@ const deleteBlog = async (id: string) => {
 
   return;
 };
+const toggleIsFeatured = async (id : string) => {
+  const blog = await prisma.blog.findUnique({
+    where : {
+      id
+    }
+  })
+
+  if(!blog){
+    throw new ApiError(404,"Blog Not Found");
+}
+
+const updatedBlog = await prisma.blog.update({
+  where : {id},
+  data : {
+    isFeatured : !blog.isFeatured
+  }
+})
+
+return updatedBlog
+
+
+}
 
 export const blogService = {
   createBlog,
   getBlogs,
   updateBlog,
   getSingleBlog,
-  deleteBlog
+  deleteBlog,
+  toggleIsFeatured
 };

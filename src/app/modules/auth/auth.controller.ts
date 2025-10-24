@@ -56,13 +56,6 @@ const userInfo = catchAsync(
 
     const result = await authService.userInfo(req.user)
 
-
-
-
-
-
-
-
     sendResponse(res, {
       statusCode: 200,
       success: true,

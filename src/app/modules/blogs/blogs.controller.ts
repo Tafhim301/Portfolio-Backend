@@ -33,6 +33,18 @@ const updateBlog = catchAsync(
     });
   }
 );
+const toggleIsFeatured = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await blogService.toggleIsFeatured(req.params.id);
+
+    sendResponse(res, {
+      statusCode: 201,
+      success: true,
+      message: "IsFeatured updated successfully",
+      data: result,
+    });
+  }
+);
 const getSingleBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await blogService.getSingleBlog(req.params.slug);
@@ -76,6 +88,7 @@ export const blogController = {
   getBlogs,
   updateBlog,
   getSingleBlog,
-  deleteBlog
+  deleteBlog,
+  toggleIsFeatured
 };
 

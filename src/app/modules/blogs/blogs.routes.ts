@@ -25,6 +25,8 @@ router.patch(
   validateFormDataRequest(updateBlogSchema),
   blogController.updateBlog
 );
+router.patch("/toggleIsFeatured/:id",auth(ROlE.ADMIN),blogController.toggleIsFeatured)
+
 router.delete('/:id',blogController.deleteBlog)
 
 export const blogRoutes = router;

@@ -5,7 +5,7 @@ import config from "../../config";
 
 export const auth = (...roles : string[]) => {
     return async(req : Request, res: Response, next : NextFunction) => {
-        console.log(req.cookies)
+        
         try {
             const token = req.cookies.accessToken;
      
