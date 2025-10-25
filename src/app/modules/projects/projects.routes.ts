@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { projectsController } from "./projects.controller";
 import { validateFormDataRequest } from "../../middlewares/validateRequest";
-import { createProjectSchema } from "./project.validation";
+import { createProjectSchema, updateProjectSchema } from "./project.validation";
 import { fileUploader } from "../../helper/fileUploader";
 import { auth } from "../../middlewares/auth";
 import { ROlE } from "@prisma/client";
@@ -27,6 +27,18 @@ router.post(
   ]),
   validateFormDataRequest(createProjectSchema),
   projectsController.uploadProject
+);
+
+router.patch(
+  "/:id",
+  auth(ROlE.ADMIN),
+   fileUploader.upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "demoImages", maxCount: 10 },
+  ]),
+  validateFormDataRequest(updateProjectSchema),
+  projectsController.updateProject
+  
 );
 
 export const projectsRoutes = router;

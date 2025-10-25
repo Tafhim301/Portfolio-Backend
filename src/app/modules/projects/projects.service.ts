@@ -57,6 +57,68 @@ const uploadProject = async (req: Request<{}, {}, ProjectRequestBody, {}> & { fi
 };
 
 
+const updateProject = async (
+  req: Request & { files?: MulterFiles },
+  id: string
+) => {
+  const existingProject = await prisma.project.findUnique({
+    where: { id },
+  });
+
+  if (!existingProject) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Project not found");
+  }
+
+  const updateData: any = { ...req.body.project };
+
+
+
+  
+
+  const thumbnailFile = req.files?.thumbnail?.[0] 
+  if (thumbnailFile) {
+    const uploadedThumb = await fileUploader.uploadToCloudiary(thumbnailFile);
+    updateData.thumbnail = uploadedThumb?.secure_url;
+  } else if (req.body.project.existingThumbnail) {
+    updateData.thumbnail = req.body.project.existingThumbnail; 
+  } else {
+    updateData.thumbnail = existingProject.thumbnail; 
+  }
+
+ 
+  const demoImageFiles = req.files?.demoImages || [];
+  let uploadedDemoImages: string[] = [];
+if (demoImageFiles.length > 0) {
+  const urls = await Promise.all(
+    demoImageFiles.map(async (file) => {
+      const uploaded = await fileUploader.uploadToCloudiary(file);
+      return uploaded?.secure_url; 
+    })
+  );
+
+  uploadedDemoImages = urls.filter((url): url is string => !!url);
+}
+  updateData.demoImages = [
+    ...(req.body.existingDemoImages || existingProject.demoImages),
+
+    ...uploadedDemoImages,
+  ];
+
+  
+  if (updateData.title && updateData.title !== existingProject.title) {
+    updateData.slug = await generateUniqueSlug(updateData.title, "project");
+  }
+
+  const updatedProject = await prisma.project.update({
+    where: { id },
+    data: updateData,
+  });
+
+  return updatedProject;
+};
+
+
+
 const getAllProjects = async () => {
   const result = await prisma.project.findMany();
 
@@ -92,5 +154,6 @@ export const projectService = {
   uploadProject,
   getAllProjects,
   getSingleProject,
-  deleteProject
+  deleteProject,
+  updateProject
 };

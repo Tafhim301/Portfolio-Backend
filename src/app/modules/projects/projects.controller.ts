@@ -20,7 +20,7 @@ const getAllProjects = catchAsync(
     const result = await projectService.getAllProjects();
 
     sendResponse(res, {
-      statusCode: 201,
+      statusCode: 200,
       success: true,
       message: "Projects retrieved successfully",
       data: result,
@@ -32,9 +32,21 @@ const getSingleProject = catchAsync(
     const result = await projectService.getSingleProject(req.params.slug);
 
     sendResponse(res, {
-      statusCode: 201,
+      statusCode: 200,
       success: true,
       message: "Project retrieved successfully",
+      data: result,
+    });
+  }
+);
+const updateProject = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await projectService.updateProject(req,req.params.id);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Project updated successfully",
       data: result,
     });
   }
@@ -44,7 +56,7 @@ const deleteProject = catchAsync(
    const result = await projectService.deleteProject(req.params.id);
 
     sendResponse(res, {
-      statusCode: 201,
+      statusCode: 200,
       success: true,
       message: "Project deleted successfully",
       data: result,
@@ -57,6 +69,7 @@ export const projectsController = {
   uploadProject,
   getAllProjects,
   getSingleProject,
-  deleteProject
+  deleteProject,
+  updateProject
 
 }
