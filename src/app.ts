@@ -3,16 +3,21 @@ import cors from 'cors';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import config from './config';
-import { uptime } from 'process';
-import { timeStamp } from 'console';
 import router from './app/routes';
 import cookieParser from 'cookie-parser';
 import { seedAdmin } from './app/utils/seedAdmin';
 
 const app: Application = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
+    origin: ['http://localhost:3000','https://portfolio-frontend-xi-two.vercel.app'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  
+
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization' 
+  ],
 }));
 
 //parser

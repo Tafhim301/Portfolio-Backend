@@ -5,7 +5,8 @@
   "author": "shafayat",
   "license": "MIT",
   "prisma": {
-    "schema": "./prisma/schema"
+    "schema": "./prisma/schema",
+    "seed" : "ts-node-dev ./src/app/utils/seedAdmin"
   },
   "scripts": {
     "build" : "tsc",

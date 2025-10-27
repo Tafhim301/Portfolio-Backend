@@ -15,21 +15,23 @@ const login = catchAsync(
       httpOnly: true,
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24 * 30,
+      path : '/'
     });
     res.cookie("refreshToken", refreshToken, {
       secure: true,
       httpOnly: true,
       sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24 * 90,
+      path : '/'
     });
 
     sendResponse(res, {
       statusCode: 201,
       success: true,
       message: "Logged in successfully",
-      data: {
-        user,
-      },
+      data: 
+        result,
+      
     });
   }
 );
