@@ -27,6 +27,6 @@ router.patch(
 );
 router.patch("/toggleIsFeatured/:id",auth(ROlE.ADMIN),blogController.toggleIsFeatured)
 
-router.delete('/:id',blogController.deleteBlog)
+router.delete('/:id',auth(ROlE.ADMIN),blogController.deleteBlog)
 
 export const blogRoutes = router;
