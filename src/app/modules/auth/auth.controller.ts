@@ -5,45 +5,49 @@ import { authService } from "./auth.service";
 
 const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
     const result = await authService.login(req.body);
+    const { accessToken, refreshToken } = result;
 
-    const { accessToken, refreshToken, user } = result;
+    
+    const cookieOptions = {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none' as const,
+      path: '/',
+    };
 
     res.cookie("accessToken", accessToken, {
-      secure: true,
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24 * 30,
-      path : '/'
+      ...cookieOptions,
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
+
     res.cookie("refreshToken", refreshToken, {
-      secure: true,
-      httpOnly: true,
-      sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24 * 90,
-      path : '/'
+      ...cookieOptions,
+      maxAge: 1000 * 60 * 60 * 24 * 90, // 90 days
     });
 
     sendResponse(res, {
       statusCode: 201,
       success: true,
       message: "Logged in successfully",
-      data: 
-        result,
-      
+      data: result,
     });
   }
 );
+
 const logOut = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
 
-    res.clearCookie('accessToken')
+    const cookieOptions = {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'none' as const,
+      path: '/',
+    };
 
-
-
-
-
+    // Clear both access and refresh tokens
+    res.clearCookie('accessToken', cookieOptions);
+    res.clearCookie('refreshToken', cookieOptions);
 
     sendResponse(res, {
       statusCode: 200,
@@ -53,10 +57,10 @@ const logOut = catchAsync(
     });
   }
 );
+
 const userInfo = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-
-    const result = await authService.userInfo(req.user)
+    const result = await authService.userInfo(req.user);
 
     sendResponse(res, {
       statusCode: 200,
@@ -66,8 +70,6 @@ const userInfo = catchAsync(
     });
   }
 );
-
-
 
 export const authController = {
   login,
