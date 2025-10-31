@@ -83,7 +83,7 @@ const getBlogs = async (filters: any, options: any) => {
 };
 const getSingleBlog = async (slug: string) => {
 
-  
+
   const result = await prisma.blog.findUnique({
     where: {
       slug: slug,
@@ -93,11 +93,11 @@ const getSingleBlog = async (slug: string) => {
     throw new ApiError(404, "Blog Not Found")
   }
 
-  const updatedResult =  await prisma.blog.update({
+  const updatedResult = await prisma.blog.update({
     where: {
       slug: slug,
-    
- },
+
+    },
 
     data: {
       views: result.views + 1
@@ -172,28 +172,36 @@ const deleteBlog = async (id: string) => {
 
   return;
 };
-const toggleIsFeatured = async (id : string) => {
+const toggleIsFeatured = async (id: string) => {
   const blog = await prisma.blog.findUnique({
-    where : {
+    where: {
       id
     }
   })
 
-  if(!blog){
-    throw new ApiError(404,"Blog Not Found");
-}
-
-const updatedBlog = await prisma.blog.update({
-  where : {id},
-  data : {
-    isFeatured : !blog.isFeatured
+  if (!blog) {
+    throw new ApiError(404, "Blog Not Found");
   }
-})
 
-return updatedBlog
+  const updatedBlog = await prisma.blog.update({
+    where: { id },
+    data: {
+      isFeatured: !blog.isFeatured
+    }
+  })
+
+  return updatedBlog
 
 
 }
+
+const getFeaturedBlogs = async () => {
+  const featuredBlogs = await prisma.blog.findMany({
+    where: { isFeatured: true },
+  })
+
+  return featuredBlogs
+};
 
 export const blogService = {
   createBlog,
@@ -201,5 +209,6 @@ export const blogService = {
   updateBlog,
   getSingleBlog,
   deleteBlog,
-  toggleIsFeatured
+  toggleIsFeatured,
+  getFeaturedBlogs
 };

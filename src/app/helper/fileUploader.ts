@@ -7,14 +7,14 @@ import { existsSync, mkdirSync } from "fs";
 
 // Determine upload directory based on environment
 const getUploadDir = () => {
-  // In production (serverless), use /tmp
+  
   if (process.env.NODE_ENV === "production") {
     return "/tmp";
   }
   // In development, use uploads folder in project root
   const uploadDir = path.join(process.cwd(), "uploads");
   
-  // Create uploads directory if it doesn't exist
+
   if (!existsSync(uploadDir)) {
     mkdirSync(uploadDir, { recursive: true });
   }

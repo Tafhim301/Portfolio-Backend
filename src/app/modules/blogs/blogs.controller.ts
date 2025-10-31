@@ -57,13 +57,25 @@ const getSingleBlog = catchAsync(
     });
   }
 );
+const getFeaturedBlogs = catchAsync(
+      async (req: Request, res: Response, next: NextFunction) => {
+        const result = await blogService.getFeaturedBlogs();
+
+    sendResponse(res, { 
+      statusCode: 201,
+      success: true,
+      message: "Featured blogs retrieved successfully",
+      data: result,
+    });
+  }
+);
 
 const createBlog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const result = await blogService.createBlog(req);
 
     sendResponse(res, {
-      statusCode: 201,
+      statusCode: 200,
       success: true,
       message: "Blog Created successfully",
       data: result,
@@ -89,6 +101,7 @@ export const blogController = {
   updateBlog,
   getSingleBlog,
   deleteBlog,
-  toggleIsFeatured
+  toggleIsFeatured,
+  getFeaturedBlogs
 };
 

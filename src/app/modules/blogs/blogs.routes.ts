@@ -10,6 +10,7 @@ const router = Router();
 
 router.get("/", blogController.getBlogs);
 router.get("/:slug", blogController.getSingleBlog);
+router.get("/featured", blogController.getFeaturedBlogs);
 router.post(
   "/",
   auth(ROlE.ADMIN),
